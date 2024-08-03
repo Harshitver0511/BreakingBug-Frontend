@@ -20,6 +20,7 @@ const Logout = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('user') //added remove Item
+    console.log("logout");
     navigate('/');
   };
 

@@ -219,7 +219,7 @@ export const getSearchedProducts = (address, key) => async (dispatch) => {
             dispatch(getSearchFailed(result.data.message));
         }
         else {
-            dispatch(setFilteredProducts(result.data.files));
+            dispatch(setFilteredProducts(result.data));
         }
 
     } catch (error) {

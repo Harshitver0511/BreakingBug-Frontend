@@ -41,9 +41,9 @@ const Products = ({productData}) => {
     setCurrentPage(value);
   };
 
-  if (!responseSearch) {
-    return <div>Product not found</div>;
-  }
+  // if (!responseSearch) {
+  //   return <div>Product not found</div>;
+  // }
 
   return (
     <>

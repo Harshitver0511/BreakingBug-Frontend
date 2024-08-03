@@ -18,7 +18,7 @@ const CustomerSearch = ({ mode }) => {
 
         dispatch(getSearchedProducts("searchProduct", searchTerm));
     };
-
+   
     return (
         <div>
             {

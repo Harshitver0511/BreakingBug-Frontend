@@ -2,9 +2,7 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-    Grid, Box, Typography, Paper, Checkbox, FormControlLabel, TextField, CssBaseline, IconButton, InputAdornment, CircularProgress
-} from '@mui/material';
+import { Grid, Box, Typography, Paper, Checkbox, FormControlLabel, TextField, CssBaseline, IconButton, InputAdornment, CircularProgress } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { LightPurpleButton } from '../utils/buttonStyles';
 import { authUser } from '../redux/userHandle';
@@ -12,35 +10,30 @@ import styled from 'styled-components';
 import Popup from '../components/Popup';
 
 const AuthenticationPage = ({ mode, role }) => {
-    const bgpic = "https://images.pexels.com/photos/1121097/pexels-photo-1121097.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1";
 
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+    const bgpic = "https://images.pexels.com/photos/1121097/pexels-photo-1121097.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
 
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+    // @ts-ignore
     const { status, currentUser, response, error, currentRole } = useSelector(state => state.user);;
 
-    const [toggle, setToggle] = useState(false);
-    const [loader, setLoader] = useState(false);
+    const [toggle, setToggle] = useState(false)
+    const [loader, setLoader] = useState(false)
     const [showPopup, setShowPopup] = useState(false);
     const [message, setMessage] = useState("");
 
-    const [formData, setFormData] = useState({
-        email: '',
-        password: '',
-        userName: '',
-        shopName: ''
-    });
-
-    const [errors, setErrors] = useState({
-        email: false,
-        password: false,
-        userName: false,
-        shopName: false
-    });
+    const [emailError, setEmailError] = useState(false);
+    const [passwordError, setPasswordError] = useState(false);
+    const [userNameError, setUserNameError] = useState(false);
+    const [shopNameError, setShopNameError] = useState(false);
 
     const handleSubmit = (event) => {
-
-        let email, password;
+        event.preventDefault() //prevent deafult
+        const email = event.target.email.value; //added pass value
+    const password = event.target.password.value; //added email value
+    
 
         if (!password) {
             if (!email) setEmailError(true);
@@ -58,6 +51,8 @@ const AuthenticationPage = ({ mode, role }) => {
 
             if (role === "Seller") {
                 const shopName = event.target.shopName.value;
+                console.log(shopName);
+                
 
                 if (!shopName) {
                     if (!shopName) setShopNameError(true);
@@ -77,27 +72,30 @@ const AuthenticationPage = ({ mode, role }) => {
             const fields = { email, password }
             dispatch(authUser(fields, role, mode))
         }
-
-        setLoader(true);
+        setLoader(true)
     };
 
     const handleInputChange = (event) => {
-        const { name, value } = event.target;
-        setFormData(prevFormData => ({ ...prevFormData, [name]: value }));
-        setErrors(prevErrors => ({ ...prevErrors, [name]: false }));
+        const { name } = event.target;
+        if (name === 'email') setEmailError(false);
+        if (name === 'password') setPasswordError(false);
+        if (name === 'userName') setUserNameError(false);
+        if (name === 'shopName') setShopNameError(false);
     };
 
     useEffect(() => {
         if (status === 'success' && currentRole !== null) {
             navigate('/');
-        } else if (status === 'failed') {
-            setMessage(response);
-            setShowPopup(true);
-            setLoader(false);
-        } else if (status === 'error') {
-            setLoader(false);
-            setMessage("Network Error");
-            setShowPopup(true);
+        }
+        else if (status === 'failed') {
+            setMessage(response)
+            setShowPopup(true)
+            setLoader(false)
+        }
+        else if (status === 'error') {
+            setLoader(false)
+            setMessage("Network Error")
+            setShowPopup(true)
         }
     }, [status, currentUser, currentRole, navigate, error, response]);
 
@@ -151,8 +149,8 @@ const AuthenticationPage = ({ mode, role }) => {
                                     autoComplete="name"
                                     autoFocus
                                     variant="standard"
-                                    error={errors.userName}
-                                    helperText={errors.userName && 'Name is required'}
+                                    error={userNameError}
+                                    helperText={userNameError && 'Name is required'}
                                     onChange={handleInputChange}
                                 />
                             }
@@ -166,8 +164,8 @@ const AuthenticationPage = ({ mode, role }) => {
                                     name="shopName"
                                     autoComplete="off"
                                     variant="standard"
-                                    error={errors.shopName}
-                                    helperText={errors.shopName && 'Shop name is required'}
+                                    error={shopNameError}
+                                    helperText={shopNameError && 'Shop name is required'}
                                     onChange={handleInputChange}
                                 />
                             }
@@ -180,8 +178,8 @@ const AuthenticationPage = ({ mode, role }) => {
                                 name="email"
                                 autoComplete="email"
                                 variant="standard"
-                                error={errors.email}
-                                helperText={errors.email && 'Email is required'}
+                                error={emailError}
+                                helperText={emailError && 'Email is required'}
                                 onChange={handleInputChange}
                             />
                             <TextField
@@ -194,8 +192,8 @@ const AuthenticationPage = ({ mode, role }) => {
                                 id="password"
                                 autoComplete="current-password"
                                 variant="standard"
-                                error={errors.password}
-                                helperText={errors.password && 'Password is required'}
+                                error={passwordError}
+                                helperText={passwordError && 'Password is required'}
                                 onChange={handleInputChange}
                                 InputProps={{
                                     endAdornment: (
@@ -266,9 +264,9 @@ const AuthenticationPage = ({ mode, role }) => {
             <Popup message={message} setShowPopup={setShowPopup} showPopup={showPopup} />
         </>
     );
-};
+}
 
-export default AuthenticationPage;
+export default AuthenticationPage
 
 const StyledLink = styled(Link)`
   margin-top: 9px;
