@@ -19,7 +19,7 @@ const Logout = () => {
   }, [currentRole, currentUser, dispatch])
 
   const handleLogout = () => {
-   
+    localStorage.removeItem('user') //added remove Item
     navigate('/');
   };
 

@@ -27,12 +27,17 @@ import {
 } from './userSlice';
 
 export const authUser = (fields, role, mode) => async (dispatch) => {
+    console.log(fields,role,mode);
+    
     dispatch(authRequest());
-
+    
     try {
+        console.log("working");
+        
         const result = await axios.post(`https://breaking-bug-backend.vercel.app/${role}${mode}`, fields, {
             headers: { 'Content-Type': 'application/json' },
         });
+        
         if (result.data.role) {
             dispatch(authSuccess(result.data));
         }
@@ -40,19 +45,25 @@ export const authUser = (fields, role, mode) => async (dispatch) => {
             dispatch(authFailed(result.data.message));
         }
     } catch (error) {
+        console.log(error);
+        
         dispatch(authError(error));
     }
 };
 
 export const addStuff = (address, fields) => async (dispatch) => {
+    console.log("working");
     
 
     try {
         dispatch(authRequest());
+        console.log("working  till now");
+        console.log(fields);
+        
         const result = await axios.post(`https://breaking-bug-backend.vercel.app/${address}`, fields, {
             headers: { 'Content-Type': 'application/json' },
         });
-
+        console.log("working  till now");
         if (result.data.message) {
             dispatch(authFailed(result.data.message));
         } else {
@@ -98,12 +109,14 @@ export const deleteStuff = (id, address) => async (dispatch) => {
 
 export const updateCustomer = (fields, id) => async (dispatch) => {
     try{
+        console.log("working");
+        console.log(fields,id);
+        
     dispatch(updateCurrentUser(fields));
     await axios.put(`https://breaking-bug-backend.vercel.app/CustomerUpdate/${id}`, fields);
-
-
         dispatch(stuffUpdated());
-
+        console.log("next");
+        
       } catch (error) {
 
         dispatch(getError(error));
@@ -149,6 +162,7 @@ export const getProductDetails = (id) => async (dispatch) => {
 
     try {
         const result = await axios.get(`https://breaking-bug-backend.vercel.app/getProductDetail/${id}`);
+        
         if (result.data.message) {
             dispatch(getProductDetailsFailed(result.data.message));
         }
@@ -182,6 +196,8 @@ export const getSpecificProducts = (id, address) => async (dispatch) => {
     dispatch(getRequest());
     try {
         const result = await axios.get(`https://breaking-bug-backend.vercel.app/${address}/${id}`);
+        console.log(result);
+        
         if (result.data.message) {
             dispatch(getSpecificProductsFailed(result.data.message));
         }

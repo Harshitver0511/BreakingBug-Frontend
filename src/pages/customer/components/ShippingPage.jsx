@@ -10,6 +10,8 @@ import { BlueButton, GreenButton } from '../../../utils/buttonStyles';
 import { useNavigate } from 'react-router-dom';
 
 const ShippingPage = ({ handleNext, profile }) => {
+  
+  // @ts-ignore
   const { currentUser } = useSelector(state => state.user);
 
   const dispatch = useDispatch();
@@ -75,13 +77,14 @@ const ShippingPage = ({ handleNext, profile }) => {
       newErrors.country = '';
     }
 
-    if (formData.pinCode.trim() === '' || isNaN(formData.pinCode) && formData.pinCode.length == 6) {
+    if (formData.pinCode.trim() === '' || isNaN(parseInt(formData.pinCode)) && formData.pinCode.length == 6) {
       newErrors.pinCode = 'Pin Code is required and should be a 6-digit number';
     } else {
       newErrors.pinCode = '';
     }
+    //added parseInts
 
-    if (formData.phoneNo.trim() === '' || isNaN(formData.phoneNo) || formData.phoneNo.length !== 10) {
+    if (formData.phoneNo.trim() === '' || isNaN(parseInt(formData.phoneNo)) || formData.phoneNo.length !== 10) {
       newErrors.phoneNo = 'Phone Number is required and should be a 10-digit number';
     } else {
       newErrors.phoneNo = '';
@@ -133,10 +136,10 @@ const ShippingPage = ({ handleNext, profile }) => {
 
   const editHandler = (event) => {
     event.preventDefault()
-    if (isNaN(pinCode) || pinCode.length !== 6) {
+    if (isNaN(parseInt(pinCode)) || pinCode.length !== 6) { //added parseINt
       setPinCodeError(true)
     }
-    else if (isNaN(phoneNo) || phoneNo.length !== 10) {
+    else if (isNaN(parseInt(phoneNo)) || phoneNo.length !== 10) { //parseINt
       setPhoneNoError(true)
     }
     else {
@@ -147,6 +150,7 @@ const ShippingPage = ({ handleNext, profile }) => {
       setShowTab(false)
     }
   };
+  
 
   return (
     <React.Fragment>
@@ -319,7 +323,7 @@ const ShippingPage = ({ handleNext, profile }) => {
                   variant="standard"
                   value={formData.address}
                   onChange={handleInputChange}
-                  error={errors.address}
+                  error={!!errors.address} //added !!
                   helperText={errors.address}
                 />
               </Grid>

@@ -84,6 +84,8 @@ const userSlice = createSlice({
             state.isLoggedIn = true;
         },
         addToCart: (state, action) => {
+            console.log("working");
+            
             const existingProduct = state.currentUser.cartDetails.find(
                 (cartItem) => cartItem._id === action.payload._id
             );
@@ -138,7 +140,7 @@ const userSlice = createSlice({
             if (productInCart) {
                 state.productDetailsCart = { ...productInCart };
             } else {
-                state.productDetailsCart = null;
+                state.productDetailsCart = {};
             }
         },
 
@@ -170,19 +172,29 @@ const userSlice = createSlice({
         },
 
         isTokenValid: (state) => {
-            const decodedToken = jwtDecode(state.currentToken);
-            if (decodedToken) {              state.isLoggedIn = true;
-            } else {
-                localStorage.removeItem('user');
-                state.currentUser = null;
-                state.currentRole = null;
-                state.currentToken = null;
-                state.status = 'idle';
-                state.response = null;
-                state.error = null;
-                state.isLoggedIn = false;
+            if (state.currentToken) {
+              try {
+                const decodedToken = jwtDecode(state.currentToken);
+                
+                const currentTime = Date.now() / 1000;
+                if (decodedToken.exp > currentTime) {
+                  state.isLoggedIn = true;
+                  return;
+                }
+              } catch (error) {
+                console.error("Invalid token", error);
+              }
             }
-        },
+            
+            localStorage.removeItem('user');
+            state.currentUser = null;
+            state.currentRole = null;
+            state.currentToken = null;
+            state.status = 'idle';
+            state.response = null;
+            state.error = null;
+            state.isLoggedIn = false;
+          },
 
         getRequest: (state) => {
             state.loading = true;
@@ -230,7 +242,7 @@ const userSlice = createSlice({
 
         specificProductSuccess: (state, action) => {
             state.specificProductData = action.payload;
-            state.responseSpecificProducts = null;
+            state.responseSpecificProducts = action.payload; //added action.payload instead of null
             state.loading = false;
             state.error = null;
         },

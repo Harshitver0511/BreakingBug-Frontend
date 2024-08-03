@@ -16,6 +16,7 @@ const AuthenticationPage = ({ mode, role }) => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
+    // @ts-ignore
     const { status, currentUser, response, error, currentRole } = useSelector(state => state.user);;
 
     const [toggle, setToggle] = useState(false)
@@ -29,8 +30,10 @@ const AuthenticationPage = ({ mode, role }) => {
     const [shopNameError, setShopNameError] = useState(false);
 
     const handleSubmit = (event) => {
-
-        let email, password;
+        event.preventDefault() //prevent deafult
+        const email = event.target.email.value; //added pass value
+    const password = event.target.password.value; //added email value
+    
 
         if (!password) {
             if (!email) setEmailError(true);
@@ -48,6 +51,8 @@ const AuthenticationPage = ({ mode, role }) => {
 
             if (role === "Seller") {
                 const shopName = event.target.shopName.value;
+                console.log(shopName);
+                
 
                 if (!shopName) {
                     if (!shopName) setShopNameError(true);
