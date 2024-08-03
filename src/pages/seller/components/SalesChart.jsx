@@ -13,10 +13,12 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import Chart from 'react-apexcharts';
 import { ChartDatabyYear } from '../../../utils/chartData';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';  
+import { useLocation } from 'react-router-dom';
 
 
 const SalesChart = ({  }) => {
+   
 
     const navigate = useNavigate();
 

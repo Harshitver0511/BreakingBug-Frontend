@@ -18,7 +18,7 @@ const ViewProductSeller = () => {
 //   Fixed a Typo: Corrected the typo reviewreviewername to review.reviewername.
 // Moved Styles: Moved the styles definitions for better readability and maintainability.
 // Refactored JSX: Cleaned up the JSX structure for better readability.
-
+   
   const [showTab, setShowTab] = useState(false);
 
   useEffect(() => {

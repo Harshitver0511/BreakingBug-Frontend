@@ -104,7 +104,7 @@ const ViewOrder = () => {
                                     </ProductInfo>
                                 </ProductContainer>
 
-                                {
+                                { 
                                     currentRole === "Customer" &&
                                     <>
                                         <ButtonContainer>

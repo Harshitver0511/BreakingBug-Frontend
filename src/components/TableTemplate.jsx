@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import {Table, TableBody, TableCell, TableContainer, TableRow,  styled} from '@mui/material';
 import {tableCellClasses} from '@mui/material/TableCell';
 import Button from '@mui/material/Button';
-
+  
 
 
 const TableTemplate = ({columns, rows}) => {

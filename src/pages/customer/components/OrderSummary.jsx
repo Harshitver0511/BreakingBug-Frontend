@@ -22,7 +22,7 @@ const OrderSummary = ({ handleNext, handleBack }) => {
         if (productID) {
             dispatch(fetchProductDetailsFromCart(productID));
         }else
-            return(handleNext)
+            return(handleNext)  
     }, [productID, dispatch]);
 
     let cartDetails = currentUser.cartDetails;

@@ -12,7 +12,7 @@ const CustomerSearch = ({ mode }) => {
     const [searchTerm, setSearchTerm] = useState("")
 
     const { filteredProducts } = useSelector(state => state.user);
-
+ 
     const handleSearch = (e) => {
        e.preventDefault()
 
