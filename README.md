@@ -1,5 +1,5 @@
 # Breaking Bug - Frontend Repository
-[Google spreadsheet Link](https://docs.google.com/spreadsheets/d/19swn98cQ5_3oR_BA0ZlC6l7Z6V8I-lUd8VIzaXtMcE0/edit?usp=sharing
+[Google spreadsheet Link](https://docs.google.com/spreadsheets/d/19swn98cQ5_3oR_BA0ZlC6l7Z6V8I-lUd8VIzaXtMcE0/edit?usp=sharing)
 
 
 [ vercel Link](https://breaking-bug-frontend-two.vercel.app)
