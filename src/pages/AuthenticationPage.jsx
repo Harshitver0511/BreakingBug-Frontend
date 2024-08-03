@@ -17,7 +17,7 @@ const AuthenticationPage = ({ mode, role }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const { status, currentUser, response, error, currentRole } = useSelector(state => state.user);
+    const { status, currentUser, response, error, currentRole } = useSelector(state => state.user);;
 
     const [toggle, setToggle] = useState(false);
     const [loader, setLoader] = useState(false);
@@ -39,32 +39,43 @@ const AuthenticationPage = ({ mode, role }) => {
     });
 
     const handleSubmit = (event) => {
-        event.preventDefault();
 
-        const email = event.target.email.value;
-        const password = event.target.password.value;
-        const userName = event.target.userName ? event.target.userName.value : '';
-        const shopName = event.target.shopName ? event.target.shopName.value : '';
+        let email, password;
 
-        const newErrors = {
-            email: !email,
-            password: !password,
-            userName: mode === 'Register' && !userName,
-            shopName: mode === 'Register' && role === 'Seller' && !shopName
-        };
-
-        setErrors(newErrors);
-
-        if (Object.values(newErrors).some(error => error)) {
+        if (!password) {
+            if (!email) setEmailError(true);
+            if (!password) setPasswordError(true);
             return;
         }
 
-        if (mode === "Register") {
-            const fields = role === "Seller" ? { name: userName, email, password, role, shopName } : { name: userName, email, password, role };
-            dispatch(authUser(fields, role, mode));
-        } else {
-            const fields = { email, password };
-            dispatch(authUser(fields, role, mode));
+         if (mode === "Register") {
+            const name = event.target.userName.value;
+
+            if (!name) {
+                if (!name) setUserNameError(true);
+                return;
+            }
+
+            if (role === "Seller") {
+                const shopName = event.target.shopName.value;
+
+                if (!shopName) {
+                    if (!shopName) setShopNameError(true);
+                    return;
+                }
+
+                const sellerFields = { name, email, password, role, shopName }
+                dispatch(authUser(sellerFields, role, mode))
+            }
+            else {
+                const customerFields = { name, email, password, role }
+
+                dispatch(authUser(customerFields, role, mode))
+            }
+        }
+        else if (mode === "Login") {
+            const fields = { email, password }
+            dispatch(authUser(fields, role, mode))
         }
 
         setLoader(true);

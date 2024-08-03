@@ -28,6 +28,7 @@ import { productDataList } from '../../utils/products';
 import ShopcartSpecial from './pages/ShopcartSpecial';
 import ShowCustomers from './pages/ShowCustomers';
 import SellerProfile from './pages/SellerProfile';
+import React from 'react';
 
 const SellerDashboard = () => {
     const [open, setOpen] = useState(false);

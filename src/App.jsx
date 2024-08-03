@@ -16,25 +16,24 @@ import Logout from './pages/Logout';
 import { isTokenValid } from './redux/userSlice';
 import CheckoutAftermath from './pages/customer/pages/CheckoutAftermath';
 import ViewOrder from './pages/customer/pages/ViewOrder';
+import React from 'react';
 
 
 const App = () => {
-
   const dispatch = useDispatch()
 
+  // @ts-ignore
   const { isLoggedIn, currentToken, currentRole, productData } = useSelector(state => state.user); 
-
 
   useEffect(() =>
      {
-
-
     dispatch(isTokenValid(currentToken));
-  }, [dispatch]); 
+  }, [dispatch,currentToken]); 
+  
 
   return (
     <BrowserRouter>
-      {( isLoggedIn &&currentRole === null) &&
+      {( !isLoggedIn && currentRole === null) && // added not
         <>
           <Navbar />
 
@@ -43,7 +42,7 @@ const App = () => {
             <Route path="/Home" element={<Home />} />
             <Route path='*' element={<Navigate to="/" />} />
 
-            <Route path="/Products" element={<Products productData={productData} />} />
+            <Route path="/Products" element={<Products />} />
 
             <Route path="/product/view/:id" element={<ViewProduct />} />
 

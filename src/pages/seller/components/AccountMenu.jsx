@@ -6,10 +6,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 const AccountMenu = () => {
-    const [anchorEl, setAnchorEl] = useEffect(null);
+    const [anchorEl, setAnchorEl] = useState(null); //added useState instaed of useEffect
 
     const open = Boolean(anchorEl);
 
+    // @ts-ignore
     const { currentUser } = useSelector(state => state.user);
 
     const navigate = useNavigate()

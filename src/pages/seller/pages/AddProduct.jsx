@@ -6,11 +6,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addStuff } from '../../../redux/userHandle';
 import altImage from "../../../assets/altimg.png";
 import styled from 'styled-components';
+import React from 'react';
 
 const AddProduct = () => {
 
   const dispatch = useDispatch();
 
+  // @ts-ignore
   const { currentUser, status, response, error } = useSelector(state => state.user);
 
   const [productName, setProductName] = useState("");
@@ -46,6 +48,7 @@ const AddProduct = () => {
   const submitHandler = (event) => {
     event.preventDefault();
     console.log(fields);
+  
   };
 
   useEffect(() => {

@@ -14,13 +14,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getSpecificProducts } from '../../../redux/userHandle';
 
 const CustomerOrders = () => {
-
+    
     const dispatch = useDispatch()
 
+    // @ts-ignore
     const { currentUser, loading, responseSpecificProducts } = useSelector(state => state.user);
+    console.log(currentUser);
+    
 
     useEffect(() => {
-        dispatch(getSpecificProducts("getOrderedProductsByCustomer"));
+        dispatch(getSpecificProducts( currentUser._id,"getOrderedProductsByCustomer")); ///added currentUsser._id
     }, [dispatch]);
 
     const sortOptions = [
@@ -52,7 +55,7 @@ const CustomerOrders = () => {
                 </h1>
                 :
                 <>
-                    {responseSpecificProducts ?
+                    {!responseSpecificProducts ? //added not !
                         <h1>
                             No Orders Till Now
                         </h1>

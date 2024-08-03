@@ -14,6 +14,7 @@ const Home = () => {
 
   const dispatch = useDispatch();
 
+  // @ts-ignore
   const { productData, responseProducts, error } = useSelector((state) => state.user);
 
   const [showNetworkError, setShowNetworkError] = useState(false);

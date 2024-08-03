@@ -2,6 +2,7 @@ import { styled } from '@mui/material';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import { bannerData } from '../utils/products';
+import React from 'react';
 
 const Banner = () => {
     return (

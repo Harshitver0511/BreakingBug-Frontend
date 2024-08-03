@@ -10,20 +10,28 @@ import { useParams } from 'react-router-dom';
 import { fetchProductDetailsFromCart } from '../../../redux/userSlice';
 
 const OrderSummary = ({ handleNext, handleBack }) => {
-
+    console.log("here");
+    
     const dispatch = useDispatch();
 
     const params = useParams();
+    console.log(params);
+    
     const productID = params.id;
+    
 
+    // @ts-ignore
     const { currentUser, productDetailsCart } = useSelector((state) => state.user);
 
     React.useEffect(() => {
         if (productID) {
             dispatch(fetchProductDetailsFromCart(productID));
-        }else
-            return(handleNext)  
+        }else{
+            return handleNext()  //added brackets {} and return handleNext() 
+        }
+            
     }, [productID, dispatch]);
+    
 
     let cartDetails = currentUser.cartDetails;
     let shippingData = currentUser.shippingData;
@@ -127,7 +135,7 @@ const OrderSummary = ({ handleNext, handleBack }) => {
                 </Button>
                 <Button
                     variant="contained"
-                    onClick={handleBack}
+                    onClick={handleNext} //added handle next insted of handleBack
                     sx={{ mt: 3, ml: 1 }}
                 >
                     Next

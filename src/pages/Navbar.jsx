@@ -91,7 +91,6 @@ const Navbar = () => {
     };
     React.useEffect(() => {
         if (currentRole === "Customer") {
-            console.log(currentUser);
             dispatch(updateCustomer(currentUser, currentUser._id));
         }
     }, [currentRole, currentUser, dispatch, anchorElNav])

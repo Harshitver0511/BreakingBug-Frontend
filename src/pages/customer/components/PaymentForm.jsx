@@ -10,19 +10,22 @@ import Popup from '../../../components/Popup';
 import { fetchProductDetailsFromCart, removeAllFromCart, removeSpecificProduct } from '../../../redux/userSlice';
 
 const PaymentForm = ({ handleBack }) => {
-
+    console.log("working");
+    
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
+    // @ts-ignore
     const { status, currentUser, productDetailsCart } = useSelector(state => state.user);
 
     const params = useParams();
     const productID = params.id;
-
+    
     const [paymentData, setPaymentData] = useState({
         cardName: '',
         cardNumber: '',
         expDate: '',
+        cvv : '' //added cvv
 
     });
 
@@ -40,6 +43,8 @@ const PaymentForm = ({ handleBack }) => {
     useEffect(() => {
         if (productID) {
             dispatch(fetchProductDetailsFromCart(productID));
+            console.log(productDetailsCart);
+            
         }
     }, [productID, dispatch]);
 
@@ -47,7 +52,7 @@ const PaymentForm = ({ handleBack }) => {
     const totalPrice = currentUser.cartDetails.reduce((total, item) => total + (item.quantity * item.price.cost), 0);
 
     const singleProductQuantity = productDetailsCart && productDetailsCart.quantity
-    const totalsingleProductPrice = productDetailsCart && productDetailsCart.price && productDetailsCart.price * productDetailsCart.quantity
+    const totalsingleProductPrice = productDetailsCart && productDetailsCart.price && productDetailsCart.price.cost * productDetailsCart.quantity //added price.cost
 
     const paymentID = `${paymentData.cardNumber.slice(-4)}-${paymentData.expDate.slice(0, 2)}${paymentData.expDate.slice(-2)}-${Date.now()}`;
     const paymentInfo = { id: paymentID, status: "Successful" }
@@ -69,6 +74,9 @@ const PaymentForm = ({ handleBack }) => {
         productsQuantity: singleProductQuantity,
         totalPrice: totalsingleProductPrice,
     }
+    // console.log(singleOrderData);
+    
+    
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -86,7 +94,7 @@ const PaymentForm = ({ handleBack }) => {
         if (status === 'added') {
             navigate('/Aftermath');
         }
-        else if (status !== 'failed') {
+        else if (status == 'failed') { //replaced == instead of !==
             setMessage("Order Failed")
             setShowPopup(true)
         }
@@ -151,7 +159,7 @@ const PaymentForm = ({ handleBack }) => {
                             fullWidth
                             autoComplete="cc-csc"
                             variant="standard"
-                            value={paymentData}
+                            value={paymentData.cvv}
                             onChange={handleInputChange}
                         />
                     </Grid>
