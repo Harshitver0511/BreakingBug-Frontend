@@ -203,7 +203,7 @@ export const getSearchedProducts = (address, key) => async (dispatch) => {
             dispatch(getSearchFailed(result.data.message));
         }
         else {
-            dispatch(setFilteredProducts(result.files));
+            dispatch(setFilteredProducts(result.data.files));
         }
 
     } catch (error) {

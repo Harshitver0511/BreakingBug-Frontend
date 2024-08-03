@@ -165,7 +165,7 @@ const userSlice = createSlice({
             state.currentRole = null;
             state.currentToken = null;
             state.error = null;
-            state.response = true;
+            state.response = null;
             state.isLoggedIn = false;
         },
 

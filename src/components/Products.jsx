@@ -7,10 +7,10 @@ import { BasicButton } from '../utils/buttonStyles';
 import { useNavigate } from 'react-router-dom';
 import Popup from './Popup';
 import { addStuff } from '../redux/userHandle';
-const Products = () => {
+const Products = ({productData}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { productData, currentRole, responseSearch } = useSelector((state) => state.user);
+  const { currentRole, responseSearch } = useSelector((state) => state.user);
   const itemsPerPage = 9;
   const [currentPage, setCurrentPage] = useState(1);//////////
   const [showPopup, setShowPopup] = useState(false);

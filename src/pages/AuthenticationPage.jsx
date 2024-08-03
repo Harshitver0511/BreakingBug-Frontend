@@ -2,7 +2,9 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Grid, Box, Typography, Paper, Checkbox, FormControlLabel, TextField, CssBaseline, IconButton, InputAdornment, CircularProgress } from '@mui/material';
+import {
+    Grid, Box, Typography, Paper, Checkbox, FormControlLabel, TextField, CssBaseline, IconButton, InputAdornment, CircularProgress
+} from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { LightPurpleButton } from '../utils/buttonStyles';
 import { authUser } from '../redux/userHandle';
@@ -10,87 +12,81 @@ import styled from 'styled-components';
 import Popup from '../components/Popup';
 
 const AuthenticationPage = ({ mode, role }) => {
+    const bgpic = "https://images.pexels.com/photos/1121097/pexels-photo-1121097.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1";
 
-    const bgpic = "https://images.pexels.com/photos/1121097/pexels-photo-1121097.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
+    const { status, currentUser, response, error, currentRole } = useSelector(state => state.user);
 
-    const { status, currentUser, response, error, currentRole } = useSelector(state => state.user);;
-
-    const [toggle, setToggle] = useState(false)
-    const [loader, setLoader] = useState(false)
+    const [toggle, setToggle] = useState(false);
+    const [loader, setLoader] = useState(false);
     const [showPopup, setShowPopup] = useState(false);
     const [message, setMessage] = useState("");
 
-    const [emailError, setEmailError] = useState(false);
-    const [passwordError, setPasswordError] = useState(false);
-    const [userNameError, setUserNameError] = useState(false);
-    const [shopNameError, setShopNameError] = useState(false);
+    const [formData, setFormData] = useState({
+        email: '',
+        password: '',
+        userName: '',
+        shopName: ''
+    });
+
+    const [errors, setErrors] = useState({
+        email: false,
+        password: false,
+        userName: false,
+        shopName: false
+    });
 
     const handleSubmit = (event) => {
+        event.preventDefault();
 
-        let email, password;
+        const email = event.target.email.value;
+        const password = event.target.password.value;
+        const userName = event.target.userName ? event.target.userName.value : '';
+        const shopName = event.target.shopName ? event.target.shopName.value : '';
 
-        if (!password) {
-            if (!email) setEmailError(true);
-            if (!password) setPasswordError(true);
+        const newErrors = {
+            email: !email,
+            password: !password,
+            userName: mode === 'Register' && !userName,
+            shopName: mode === 'Register' && role === 'Seller' && !shopName
+        };
+
+        setErrors(newErrors);
+
+        if (Object.values(newErrors).some(error => error)) {
             return;
         }
 
-         if (mode === "Register") {
-            const name = event.target.userName.value;
-
-            if (!name) {
-                if (!name) setUserNameError(true);
-                return;
-            }
-
-            if (role === "Seller") {
-                const shopName = event.target.shopName.value;
-
-                if (!shopName) {
-                    if (!shopName) setShopNameError(true);
-                    return;
-                }
-
-                const sellerFields = { name, email, password, role, shopName }
-                dispatch(authUser(sellerFields, role, mode))
-            }
-            else {
-                const customerFields = { name, email, password, role }
-
-                dispatch(authUser(customerFields, role, mode))
-            }
+        if (mode === "Register") {
+            const fields = role === "Seller" ? { name: userName, email, password, role, shopName } : { name: userName, email, password, role };
+            dispatch(authUser(fields, role, mode));
+        } else {
+            const fields = { email, password };
+            dispatch(authUser(fields, role, mode));
         }
-        else if (mode === "Login") {
-            const fields = { email, password }
-            dispatch(authUser(fields, role, mode))
-        }
-        setLoader(true)
+
+        setLoader(true);
     };
 
     const handleInputChange = (event) => {
-        const { name } = event.target;
-        if (name === 'email') setEmailError(false);
-        if (name === 'password') setPasswordError(false);
-        if (name === 'userName') setUserNameError(false);
-        if (name === 'shopName') setShopNameError(false);
+        const { name, value } = event.target;
+        setFormData(prevFormData => ({ ...prevFormData, [name]: value }));
+        setErrors(prevErrors => ({ ...prevErrors, [name]: false }));
     };
 
     useEffect(() => {
         if (status === 'success' && currentRole !== null) {
             navigate('/');
-        }
-        else if (status === 'failed') {
-            setMessage(response)
-            setShowPopup(true)
-            setLoader(false)
-        }
-        else if (status === 'error') {
-            setLoader(false)
-            setMessage("Network Error")
-            setShowPopup(true)
+        } else if (status === 'failed') {
+            setMessage(response);
+            setShowPopup(true);
+            setLoader(false);
+        } else if (status === 'error') {
+            setLoader(false);
+            setMessage("Network Error");
+            setShowPopup(true);
         }
     }, [status, currentUser, currentRole, navigate, error, response]);
 
@@ -144,8 +140,8 @@ const AuthenticationPage = ({ mode, role }) => {
                                     autoComplete="name"
                                     autoFocus
                                     variant="standard"
-                                    error={userNameError}
-                                    helperText={userNameError && 'Name is required'}
+                                    error={errors.userName}
+                                    helperText={errors.userName && 'Name is required'}
                                     onChange={handleInputChange}
                                 />
                             }
@@ -159,8 +155,8 @@ const AuthenticationPage = ({ mode, role }) => {
                                     name="shopName"
                                     autoComplete="off"
                                     variant="standard"
-                                    error={shopNameError}
-                                    helperText={shopNameError && 'Shop name is required'}
+                                    error={errors.shopName}
+                                    helperText={errors.shopName && 'Shop name is required'}
                                     onChange={handleInputChange}
                                 />
                             }
@@ -173,8 +169,8 @@ const AuthenticationPage = ({ mode, role }) => {
                                 name="email"
                                 autoComplete="email"
                                 variant="standard"
-                                error={emailError}
-                                helperText={emailError && 'Email is required'}
+                                error={errors.email}
+                                helperText={errors.email && 'Email is required'}
                                 onChange={handleInputChange}
                             />
                             <TextField
@@ -187,8 +183,8 @@ const AuthenticationPage = ({ mode, role }) => {
                                 id="password"
                                 autoComplete="current-password"
                                 variant="standard"
-                                error={passwordError}
-                                helperText={passwordError && 'Password is required'}
+                                error={errors.password}
+                                helperText={errors.password && 'Password is required'}
                                 onChange={handleInputChange}
                                 InputProps={{
                                     endAdornment: (
@@ -259,9 +255,9 @@ const AuthenticationPage = ({ mode, role }) => {
             <Popup message={message} setShowPopup={setShowPopup} showPopup={showPopup} />
         </>
     );
-}
+};
 
-export default AuthenticationPage
+export default AuthenticationPage;
 
 const StyledLink = styled(Link)`
   margin-top: 9px;
